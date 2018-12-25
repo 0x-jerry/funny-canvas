@@ -7,10 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(baseConfig, {
   devServer: {
-    contentBase: [
-      path.join(__dirname, 'src'),
-      path.join(__dirname, 'static'),
-    ],
+    contentBase: [path.join(__dirname, 'src'), path.join(__dirname, 'static')],
     compress: true,
     hot: true,
     watchContentBase: true,

@@ -2,10 +2,20 @@
 # yarn lockfile v1
 
 
+"@types/dat.gui@^0.7.2":
+  version "0.7.2"
+  resolved "https://registry.npmjs.org/@types/dat.gui/-/dat.gui-0.7.2.tgz#f6964d39504e97533774954e3dcf7a9f669196e8"
+  integrity sha512-ULAH7opLNk6jRq1/3pqYCeyVRS2hvbenzGNkWLS/ITjf+kaAZR09KBKvTG7y22sW/XQbalBSNTlTHU+cSMJJqg==
+
 "@types/pixi.js@^4.8.6":
   version "4.8.6"
   resolved "https://registry.npmjs.org/@types/pixi.js/-/pixi.js-4.8.6.tgz#c9bb6844cf581024f6bee07feb1538b37c0429ba"
   integrity sha512-70PcmzoHG723nMLx7OzMM7xoH8EnJfVVQmh1WQgXGaXdU9ygq3VlsXLRt/g6Z124abKDvmzg3hfRpA8CvBp2eA==
+
+"@types/stats.js@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.npmjs.org/@types/stats.js/-/stats.js-0.17.0.tgz#0ed81d48e03b590c24da85540c1d952077a9fe20"
+  integrity sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==
 
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
@@ -964,6 +974,11 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.npmjs.org/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
   integrity sha1-GzN5LhHpFKL9bW7WRHRkRE5fpkA=
+
+dat.gui@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.npmjs.org/dat.gui/-/dat.gui-0.7.3.tgz#fae5317a8baf65b509242d1f59b5a31a49bbb1a7"
+  integrity sha512-VfVWUcuTwae6/MTia/s2aPB1NLZXA2Gz6PiVyYOrVfODbXJLNAkVjn0aiuxx08cR68ucOuwrNXXt0m9MNVJvkQ==
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -3756,6 +3771,11 @@ static-extend@^0.1.1:
   dependencies:
     define-property "^0.2.5"
     object-copy "^0.1.0"
+
+stats.js@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.npmjs.org/stats.js/-/stats.js-0.17.0.tgz#b1c3dc46d94498b578b7fd3985b81ace7131cc7d"
+  integrity sha1-scPcRtlEmLV4t/05hbgaznExzH0=
 
 "statuses@>= 1.4.0 < 2":
   version "1.5.0"

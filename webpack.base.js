@@ -16,17 +16,12 @@ module.exports = {
     rules: [
       {
         test: /\.[tj]s$/,
-        exclude: [
-          path.join(__dirname, 'node_modules')
-        ],
+        exclude: [path.join(__dirname, 'node_modules')],
         loader: 'ts-loader',
       },
     ],
   },
   resolve: {
-    extensions: [
-      '.js',
-      '.ts',
-    ],
+    extensions: ['.js', '.ts'],
   },
 };
