@@ -25,8 +25,6 @@
   },
   "dependencies": {
     "dat.gui": "^0.7.3",
-    "pixi.js": "^4.8.4",
-    "stats.js": "^0.17.0",
-    "two.js": "^0.7.0-beta.3"
+    "stats.js": "^0.17.0"
   }
 }
