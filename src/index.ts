@@ -1,10 +1,18 @@
 import * as PIXI from 'pixi.js';
+import * as dat from 'dat.gui';
+import * as Stats from 'stats.js';
 
 const configs = {
-  count: 1000
+  count: 1000,
+  performance: true,
 };
 
-const app = new PIXI.Application(800, 600, { antialias: true });
+const app = new PIXI.Application(800, 600, {
+  antialias: true,
+  forceCanvas: true,
+  roundPixels: true,
+});
+
 document.body.appendChild(app.view);
 
 class Circle {
@@ -29,7 +37,7 @@ class Circle {
     this._time += 0.1 * Math.random();
 
     this._x += sin + Math.random() - 0.5;
-    // this._y += cos;
+    this._y += cos;
   }
 
   draw() {
@@ -44,22 +52,42 @@ const container = new PIXI.Container();
 
 const particles: Circle[] = [];
 
-for (let i = 0; i < configs.count; i++) {
-  const c = new Circle(
-    app.view.width * Math.random(),
-    app.view.height * Math.random(),
-    0.2 + Math.random() * 1.5,
-    0x2299ff
-  );
-  particles.push(c);
-  container.addChild(c.graphics);
+function initParticles(count: number) {
+  particles.splice(0);
+  container.children.forEach(c => c.destroy());
+  container.removeChildren();
+  for (let i = 0; i < count; i++) {
+    const c = new Circle(
+      app.view.width * Math.random(),
+      app.view.height * Math.random(),
+      0.2 + Math.random() * 1.5,
+      0x2299ff,
+    );
+    particles.push(c);
+    container.addChild(c.graphics);
+  }
 }
 
+initParticles(configs.count);
+
+const stats = new Stats();
+stats.showPanel(0);
+stats.dom.style.display = configs.performance ? 'block' : 'none';
+document.body.append(stats.dom);
+
+const gui = new dat.GUI();
+gui.add(configs, 'count', 100, 3000).onChange(initParticles);
+gui.add(configs, 'performance').onChange(() => {
+  stats.dom.style.display = configs.performance ? 'block' : 'none';
+});
+
 app.ticker.add(() => {
+  if (configs.performance) stats.begin();
   particles.forEach(c => {
     c.update();
     c.draw();
   });
+  if (configs.performance) stats.end();
 });
 
 app.stage.addChild(container);
