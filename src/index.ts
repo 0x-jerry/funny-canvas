@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import * as dat from 'dat.gui';
 import * as Stats from 'stats.js';
 
@@ -7,20 +6,15 @@ const configs = {
   performance: true,
 };
 
-const app = new PIXI.Application(
-  window.innerWidth - 0,
-  window.innerHeight - 4,
-  {
-    antialias: true,
-    forceCanvas: true,
-    roundPixels: true,
-  },
-);
+const canvas: HTMLCanvasElement = document.createElement('canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight - 5;
 
-document.body.appendChild(app.view);
+const ctx = canvas.getContext('2d');
+
+document.body.appendChild(canvas);
 
 class Circle {
-  graphics: PIXI.Graphics = null;
   _x: number = 0;
   _y: number = 0;
   _color: number = 0;
@@ -28,7 +22,6 @@ class Circle {
   _time: number = Math.random() * 360;
 
   constructor(x: number, y: number, radius: number, color: number) {
-    this.graphics = new PIXI.Graphics();
     this.radius = radius;
     this._x = x;
     this._y = y;
@@ -45,30 +38,23 @@ class Circle {
   }
 
   draw() {
-    this.graphics.clear();
-    this.graphics.beginFill(this._color);
-    this.graphics.drawCircle(this._x, this._y, this.radius);
-    this.graphics.endFill();
+    const mid = this.radius / 2;
+    ctx.fillRect(this._x - mid, this._y + mid, this.radius, this.radius);
   }
 }
-
-const container = new PIXI.Container();
 
 const particles: Circle[] = [];
 
 function initParticles(count: number) {
   particles.splice(0);
-  container.children.forEach(c => c.destroy());
-  container.removeChildren();
   for (let i = 0; i < count; i++) {
     const c = new Circle(
-      app.view.width * Math.random(),
-      app.view.height * Math.random(),
+      window.innerWidth * Math.random(),
+      window.innerHeight * Math.random(),
       0.2 + Math.random() * 1.5,
       0x2299ff,
     );
     particles.push(c);
-    container.addChild(c.graphics);
   }
 }
 
@@ -85,13 +71,18 @@ gui.add(configs, 'performance').onChange(() => {
   stats.dom.style.display = configs.performance ? 'block' : 'none';
 });
 
-app.ticker.add(() => {
-  if (configs.performance) stats.begin();
+function update() {
   particles.forEach(c => {
     c.update();
     c.draw();
   });
-  if (configs.performance) stats.end();
-});
+}
 
-app.stage.addChild(container);
+setInterval(() => {
+  stats.begin();
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+  ctx.fillStyle = '#2299ff';
+  update();
+  stats.end();
+}, 1000 / 60);

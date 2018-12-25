@@ -1,5 +1,5 @@
 {
-  "name": "tree",
+  "name": "canvas-test",
   "version": "1.0.0",
   "author": "cwxyz007 <jie844067636@gmail.com>",
   "scripts": {
@@ -26,6 +26,7 @@
   "dependencies": {
     "dat.gui": "^0.7.3",
     "pixi.js": "^4.8.4",
-    "stats.js": "^0.17.0"
+    "stats.js": "^0.17.0",
+    "two.js": "^0.7.0-beta.3"
   }
 }
