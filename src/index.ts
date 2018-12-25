@@ -9,9 +9,14 @@ const configs = {
   backgroundColor: '#000000',
 };
 
+const _configs = {
+  width: window.innerWidth,
+  height: window.innerHeight - 5,
+};
+
 const canvas: HTMLCanvasElement = document.createElement('canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight - 5;
+canvas.width = _configs.width;
+canvas.height = _configs.height;
 
 const ctx = canvas.getContext('2d');
 
@@ -20,11 +25,14 @@ document.body.appendChild(canvas);
 const particles: Circle[] = [];
 
 function initParticles(count: number) {
-  particles.splice(0);
-  for (let i = 0; i < count; i++) {
+  if (count < particles.length) {
+    return particles.splice(count);
+  }
+
+  for (let i = particles.length; i < count; i++) {
     const c = new Circle(
-      window.innerWidth * Math.random(),
-      window.innerHeight * Math.random(),
+      _configs.width * Math.random(),
+      _configs.height * Math.random(),
       0.2 + Math.random() * 1.5,
     );
     particles.push(c);
@@ -50,7 +58,7 @@ function update() {
   if (configs.performance) stats.begin();
 
   ctx.fillStyle = configs.backgroundColor;
-  ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+  ctx.fillRect(0, 0, _configs.width, _configs.height);
   ctx.fillStyle = configs.color;
   particles.forEach(c => {
     c.update();
