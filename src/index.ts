@@ -7,11 +7,15 @@ const configs = {
   performance: true,
 };
 
-const app = new PIXI.Application(800, 600, {
-  antialias: true,
-  forceCanvas: true,
-  roundPixels: true,
-});
+const app = new PIXI.Application(
+  window.innerWidth - 0,
+  window.innerHeight - 4,
+  {
+    antialias: true,
+    forceCanvas: true,
+    roundPixels: true,
+  },
+);
 
 document.body.appendChild(app.view);
 
