@@ -9,6 +9,16 @@ const configs = {
   performance: true,
   color: '#2299ff',
   backgroundColor: '#000000',
+  tree: {
+    r: 200,
+    y: 200,
+    delta: {
+      r: 0.6,
+      time: 0.6,
+      angle: 6,
+    },
+    time: 200,
+  },
 };
 
 const _configs = {
@@ -55,6 +65,62 @@ gui.add(configs, 'performance').onChange(() => {
 });
 gui.addColor(configs, 'color');
 gui.addColor(configs, 'backgroundColor');
+const treeGui = gui.addFolder('tree');
+treeGui.open();
+treeGui.add(configs.tree, 'r', 100, 300).onChange((val: number) => {
+  tree.updateOptions({
+    r: val,
+  });
+  tree1.updateOptions({
+    r: val,
+  });
+});
+treeGui.add(configs.tree, 'y', -300, 400).onChange((val: number) => {
+  tree.updateOptions({
+    y: val,
+  });
+  tree1.updateOptions({
+    y: val,
+  });
+});
+const deltaTreeGui = treeGui.addFolder('delta');
+deltaTreeGui.open();
+deltaTreeGui.add(configs.tree.delta, 'r', 0.1, 1).onChange((val: number) => {
+  tree.updateOptions({
+    delta: {
+      r: val,
+    },
+  });
+  tree1.updateOptions({
+    delta: {
+      r: val,
+    },
+  });
+});
+deltaTreeGui.add(configs.tree.delta, 'time', 0.1, 1).onChange((val: number) => {
+  tree.updateOptions({
+    delta: {
+      time: val,
+    },
+  });
+  tree1.updateOptions({
+    delta: {
+      time: val,
+    },
+  });
+});
+deltaTreeGui.add(configs.tree.delta, 'angle', 1, 10).onChange((val: number) => {
+  tree.updateOptions({
+    delta: {
+      angle: val,
+    },
+  });
+  tree1.updateOptions({
+    delta: {
+      angle: val,
+    },
+  });
+});
 
 const cam = new utils.Camera(
   _configs.width,
@@ -63,27 +129,15 @@ const cam = new utils.Camera(
 );
 
 const tree = new TreeLine({
-  r: 200,
-  delta: {
-    r: 0.6,
-    time: 0.6,
-    angle: 6,
-  },
-  time: 200,
+  ...configs.tree,
 });
 
 const tree1 = new TreeLine({
-  r: 200,
-  delta: {
-    r: 0.6,
-    time: 0.6,
-    angle: 6,
-  },
-  time: 200,
+  ...configs.tree,
   startAngle: 190,
 });
 
-function renderTree() {
+function renderTree(tree: TreeLine) {
   ctx.lineWidth = 2;
 
   const c = configs.color.match(/[\w\d]{2}/g).map(a => parseInt(a, 16));
@@ -93,17 +147,6 @@ function renderTree() {
 
     ctx.beginPath();
     ctx.strokeStyle = `rgba(${c.join(',')}, ${a + 0.2})`;
-    ctx.moveTo(pos1.x, pos1.y);
-    ctx.lineTo(pos2.x, pos2.y);
-    ctx.stroke();
-  });
-
-  tree1.doWithLine((x1, y1, z1, x2, y2, z2, a) => {
-    const pos1 = cam.to2d(x1, y1, z1);
-    const pos2 = cam.to2d(x2, y2, z2);
-
-    ctx.beginPath();
-    ctx.strokeStyle = `rgba(255, 25, 245, ${a + 0.2})`;
     ctx.moveTo(pos1.x, pos1.y);
     ctx.lineTo(pos2.x, pos2.y);
     ctx.stroke();
@@ -131,7 +174,8 @@ function update() {
     }
   });
 
-  renderTree();
+  renderTree(tree);
+  renderTree(tree1);
   tree.update();
   tree1.update();
 

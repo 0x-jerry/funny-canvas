@@ -5,15 +5,15 @@ interface IDelta {
 }
 
 interface IOptions {
-  r: number;
+  r?: number;
   delta?: IDelta;
-  time?: number;
+  y?: number;
   startAngle?: number;
 }
 
 export default class TreeLine {
   r: number = 30;
-  time: number = -20;
+  y: number = -20;
   delta: IDelta = {
     r: 1,
     angle: 10,
@@ -26,15 +26,24 @@ export default class TreeLine {
   constructor(options: IOptions) {
     this.r = options.r;
     this.delta = Object.assign({}, this.delta, options.delta);
-    this.time = options.time || this.time;
+    this.y = options.y || this.y;
     this._startAngle = options.startAngle || this._startAngle;
 
     this._init();
   }
 
+  updateOptions(options: IOptions) {
+    this.r = options.r || this.r;
+    this.delta = Object.assign({}, this.delta, options.delta);
+    this.y = options.y || this.y;
+    this._startAngle = options.startAngle || this._startAngle;
+    this.lines.splice(0);
+    this._init();
+  }
+
   _init() {
     let r = this.r;
-    let t = this.time;
+    let t = this.y;
     let angle = this._startAngle;
 
     while (r > 0) {
@@ -88,7 +97,7 @@ export default class TreeLine {
 
   update() {
     let r = this.r;
-    let t = this.time;
+    let t = this.y;
     let angle = this._startAngle;
     const max = this.lines.length;
     let lineIndex = 0;
