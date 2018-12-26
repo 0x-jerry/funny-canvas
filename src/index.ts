@@ -2,6 +2,7 @@ import * as dat from 'dat.gui';
 import * as Stats from 'stats.js';
 import Circle from './Circle';
 import utils from './utils';
+import TreeLine from './Tree';
 
 const configs = {
   count: 1000,
@@ -61,11 +62,38 @@ const cam = new utils.Camera(
   _configs.height + 200,
 );
 
+const tree = new TreeLine(
+  200,
+  {
+    r: 0.1,
+    y: 0.1,
+    angle: 1,
+  },
+  200,
+);
+
+function renderTree() {
+  ctx.lineWidth = 2;
+
+  const c = configs.color.match(/[\w\d]{2}/g).map(a => parseInt(a, 16));
+  tree.doWithLine((x1, y1, z1, x2, y2, z2, a) => {
+    const pos1 = cam.to2d(x1, y1, z1);
+    const pos2 = cam.to2d(x2, y2, z2);
+
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(${c.join(',')}, ${a})`;
+    ctx.moveTo(pos1.x, pos1.y);
+    ctx.lineTo(pos2.x, pos2.y);
+    ctx.stroke();
+  });
+}
+
 function update() {
   if (configs.performance) stats.begin();
 
   ctx.fillStyle = configs.backgroundColor;
   ctx.fillRect(0, 0, _configs.width, _configs.height);
+
   ctx.fillStyle = configs.color;
   particles.forEach(c => {
     c.update();
@@ -80,6 +108,9 @@ function update() {
       ctx.fillRect(pos.x, pos.y, c.radius, c.radius);
     }
   });
+
+  renderTree();
+  // tree.update();
 
   if (configs.performance) stats.end();
 }
