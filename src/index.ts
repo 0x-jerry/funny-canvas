@@ -62,15 +62,26 @@ const cam = new utils.Camera(
   _configs.height + 200,
 );
 
-const tree = new TreeLine(
-  200,
-  {
-    r: 0.1,
-    y: 0.1,
-    angle: 1,
+const tree = new TreeLine({
+  r: 200,
+  delta: {
+    r: 0.6,
+    time: 0.6,
+    angle: 6,
   },
-  200,
-);
+  time: 200,
+});
+
+const tree1 = new TreeLine({
+  r: 200,
+  delta: {
+    r: 0.6,
+    time: 0.6,
+    angle: 6,
+  },
+  time: 200,
+  startAngle: 190,
+});
 
 function renderTree() {
   ctx.lineWidth = 2;
@@ -81,7 +92,18 @@ function renderTree() {
     const pos2 = cam.to2d(x2, y2, z2);
 
     ctx.beginPath();
-    ctx.strokeStyle = `rgba(${c.join(',')}, ${a})`;
+    ctx.strokeStyle = `rgba(${c.join(',')}, ${a + 0.2})`;
+    ctx.moveTo(pos1.x, pos1.y);
+    ctx.lineTo(pos2.x, pos2.y);
+    ctx.stroke();
+  });
+
+  tree1.doWithLine((x1, y1, z1, x2, y2, z2, a) => {
+    const pos1 = cam.to2d(x1, y1, z1);
+    const pos2 = cam.to2d(x2, y2, z2);
+
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(255, 25, 245, ${a + 0.2})`;
     ctx.moveTo(pos1.x, pos1.y);
     ctx.lineTo(pos2.x, pos2.y);
     ctx.stroke();
@@ -110,7 +132,8 @@ function update() {
   });
 
   renderTree();
-  // tree.update();
+  tree.update();
+  tree1.update();
 
   if (configs.performance) stats.end();
 }

@@ -1,46 +1,54 @@
 interface IDelta {
   r?: number;
-  y?: number;
+  time?: number;
   angle?: number;
+}
+
+interface IOptions {
+  r: number;
+  delta?: IDelta;
+  time?: number;
+  startAngle?: number;
 }
 
 export default class TreeLine {
   r: number = 30;
-  y: number = -20;
+  time: number = -20;
   delta: IDelta = {
     r: 1,
     angle: 10,
-    y: 1,
+    time: 1,
   };
 
   lines: number[] = [];
   _startAngle = -90;
 
-  constructor(r: number, delta: IDelta, y: number = 20) {
-    this.r = r;
-    this.delta = Object.assign({}, this.delta, delta);
-    this.y = y;
+  constructor(options: IOptions) {
+    this.r = options.r;
+    this.delta = Object.assign({}, this.delta, options.delta);
+    this.time = options.time || this.time;
+    this._startAngle = options.startAngle || this._startAngle;
 
     this._init();
   }
 
   _init() {
     let r = this.r;
-    let y = this.y;
+    let t = this.time;
     let angle = this._startAngle;
 
     while (r > 0) {
       const x1 = r * Math.sin(angle);
-      y -= this.delta.y;
-      const y1 = y;
+      t -= this.delta.time;
+      const y1 = t;
       const z1 = r * Math.cos(angle);
       const a1 = (Math.cos(angle) + 1) / 2;
 
       angle += (Math.PI / 180) * this.delta.angle;
 
       const x2 = r * Math.sin(angle);
-      y -= this.delta.y;
-      const y2 = y;
+      t -= this.delta.time;
+      const y2 = t;
       const z2 = r * Math.cos(angle);
 
       this.lines.push(x1, y1, z1, a1, x2, y2, z2);
@@ -80,23 +88,23 @@ export default class TreeLine {
 
   update() {
     let r = this.r;
-    let y = this.y;
+    let t = this.time;
     let angle = this._startAngle;
     const max = this.lines.length;
     let lineIndex = 0;
 
     while (7 * lineIndex < max) {
       this.lines[7 * lineIndex + 0] = r * Math.sin(angle);
-      y -= this.delta.y;
-      this.lines[7 * lineIndex + 1] = y;
+      t -= this.delta.time;
+      this.lines[7 * lineIndex + 1] = t;
       this.lines[7 * lineIndex + 2] = r * Math.cos(angle);
       this.lines[7 * lineIndex + 3] = (Math.cos(angle) + 1) / 2;
 
       angle += (Math.PI / 180) * this.delta.angle;
 
       this.lines[7 * lineIndex + 4] = r * Math.sin(angle);
-      y -= this.delta.y;
-      this.lines[7 * lineIndex + 5] = y;
+      t -= this.delta.time;
+      this.lines[7 * lineIndex + 5] = t;
       this.lines[7 * lineIndex + 6] = r * Math.cos(angle);
       lineIndex++;
 
