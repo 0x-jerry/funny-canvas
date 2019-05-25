@@ -1,10 +1,7 @@
+import { IVec2 } from '../utils'
+
 export type RenderFunc = (ctx: CanvasRenderingContext2D) => void
 export type CanvasDrawStyle = string | CanvasGradient | CanvasPattern
-
-export interface IVec2 {
-  x: number
-  y: number
-}
 
 class CanvasUtils {
   canvas: HTMLCanvasElement = document.createElement('canvas')
@@ -12,6 +9,8 @@ class CanvasUtils {
     height: window.innerHeight,
     width: window.innerWidth
   }
+
+  stats: Stats = null
 
   private ctx: CanvasRenderingContext2D = null
   private renders: RenderFunc[] = []
@@ -30,9 +29,7 @@ class CanvasUtils {
   }
 
   render() {
-    if (this.enable) {
-      window.requestAnimationFrame(this._render)
-    }
+    window.requestAnimationFrame(this._render)
   }
 
   clear() {
@@ -54,6 +51,7 @@ class CanvasUtils {
       }
     })
 
+    ctx.closePath()
     ctx.stroke()
   }
 
@@ -76,8 +74,15 @@ class CanvasUtils {
   }
 
   private _render() {
+    if (this.stats) this.stats.begin()
+
     this.clear()
     this.renders.forEach((func) => func(this.ctx))
+
+    if (this.stats) this.stats.end()
+    if (this.enable) {
+      window.requestAnimationFrame(this._render)
+    }
   }
 }
 
