@@ -12,8 +12,9 @@ const configs = {
     range: 100
   },
   dot: {
+    count: 100,
     color: [0, 153, 255],
-    size: 4
+    size: 2
   },
   line: {
     color: [0, 150, 255]
@@ -22,7 +23,7 @@ const configs = {
 
 Dot.size = configs.dot.size
 
-gui.add(configs.mouse, 'range', 100, 200).onChange((val) => {
+gui.add(configs.mouse, 'range', 50, 200).onChange((val) => {
   mouse.range = val
   Dot.range = val
 })
@@ -30,6 +31,18 @@ gui.add(configs.mouse, 'range', 100, 200).onChange((val) => {
 const dotGui = gui.addFolder('dot')
 dotGui.open()
 dotGui.addColor(configs.dot, 'color')
+dotGui.add(configs.dot, 'count', 100, 300).onChange((val) => {
+  const len = dots.length
+  if (val > len) {
+    for (let i = 0; i < val - len; i++) {
+      const speed = 0.1 + Math.random() * 0.5
+      const dot = new Dot(Math.random() * Math.PI * 2, speed)
+      dots.push(dot)
+    }
+  } else {
+    dots.splice(val)
+  }
+})
 dotGui.add(configs.dot, 'size', 1, 5).onChange((val) => {
   Dot.size = val
 })
@@ -51,7 +64,7 @@ Dot.range = mouse.range
 
 const dots: Dot[] = [mouse.dot]
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < configs.dot.count; i++) {
   const speed = 0.1 + Math.random() * 0.5
 
   const dot = new Dot(Math.random() * Math.PI * 2, speed)
